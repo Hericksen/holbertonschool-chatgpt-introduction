@@ -15,19 +15,18 @@ class Minesweeper:
 
     def print_board(self, reveal=False):
         clear_screen()
-        print('    ' + ' '.join(f"{i:2}" for i in range(self.width)))
-        print('   ' + '-' * (3 * self.width))
+        print('  ' + ' '.join(str(i) for i in range(self.width)))
         for y in range(self.height):
-            print(f"{y:2} |", end=' ')
+            print(y, end=' ')
             for x in range(self.width):
                 if reveal or self.revealed[y][x]:
                     if (y * self.width + x) in self.mines:
-                        print('* ', end='')
+                        print('*', end=' ')
                     else:
                         count = self.count_mines_nearby(x, y)
-                        print(f"{count if count > 0 else ' '} ", end='')
+                        print(count if count > 0 else ' ', end=' ')
                 else:
-                    print('. ', end='')
+                    print('.', end=' ')
             print()
 
     def count_mines_nearby(self, x, y):
@@ -41,40 +40,41 @@ class Minesweeper:
         return count
 
     def reveal(self, x, y):
-        if self.revealed[y][x]:
-            return True  # Already revealed
         if (y * self.width + x) in self.mines:
-            return False  # Hit a mine
-
+            return False
         self.revealed[y][x] = True
         if self.count_mines_nearby(x, y) == 0:
             for dx in [-1, 0, 1]:
                 for dy in [-1, 0, 1]:
                     nx, ny = x + dx, y + dy
-                    if 0 <= nx < self.width and 0 <= ny < self.height:
+                    if 0 <= nx < self.width and 0 <= ny < self.height and not self.revealed[ny][nx]:
                         self.reveal(nx, ny)
         return True
+
+    def check_win(self):
+        non_mine_cells = 0
+        revealed_cells = 0
+        for y in range(self.height):
+            for x in range(self.width):
+                if (y * self.width + x) not in self.mines:
+                    non_mine_cells += 1
+                    if self.revealed[y][x]:
+                        revealed_cells += 1
+        return non_mine_cells == revealed_cells
 
     def play(self):
         while True:
             self.print_board()
             try:
-                x = int(input(f"Enter x coordinate (0-{self.width - 1}): "))
-                y = int(input(f"Enter y coordinate (0-{self.height - 1}): "))
-                if not (0 <= x < self.width and 0 <= y < self.height):
-                    print("Coordinates out of bounds. Try again.")
-                    continue
+                x = int(input("Enter x coordinate: "))
+                y = int(input("Enter y coordinate: "))
                 if not self.reveal(x, y):
                     self.print_board(reveal=True)
                     print("Game Over! You hit a mine.")
                     break
-                if all(
-                    self.revealed[ny][nx] or (ny * self.width + nx) in self.mines
-                    for ny in range(self.height)
-                    for nx in range(self.width)
-                ):
+                if self.check_win():
                     self.print_board(reveal=True)
-                    print("Congratulations! You cleared the board!")
+                    print("Congratulations! You've won!")
                     break
             except ValueError:
                 print("Invalid input. Please enter numbers only.")
