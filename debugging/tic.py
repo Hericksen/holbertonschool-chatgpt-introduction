@@ -4,7 +4,6 @@ def print_board(board):
         print(" | ".join(row))
         print("-" * 5)
 
-
 def check_winner(board):
     for row in board:
         if row.count(row[0]) == len(row) and row[0] != " ":
@@ -21,7 +20,6 @@ def check_winner(board):
         return True
 
     return False
-
 
 def tic_tac_toe():
     board = [[" "]*3 for _ in range(3)]
@@ -41,6 +39,5 @@ def tic_tac_toe():
 
     print_board(board)
     print("Player " + player + " wins!")
-
 
 tic_tac_toe()
