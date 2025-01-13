@@ -19,7 +19,7 @@ class Minesweeper:
         clear_screen()
         print('  ' + ' '.join(str(i) for i in range(self.width)))
         for y in range(self.height):
-            print(y, end=' ')
+            print(f'{y:2}', end=' ')  # Alignement correct des indices de ligne
             for x in range(self.width):
                 if reveal or self.revealed[y][x]:
                     if (y * self.width + x) in self.mines:
@@ -53,30 +53,18 @@ class Minesweeper:
                         self.reveal(nx, ny)
         return True
 
-    def check_win(self):
-        non_mine_cells = 0
-        revealed_cells = 0
-        for y in range(self.height):
-            for x in range(self.width):
-                if (y * self.width + x) not in self.mines:
-                    non_mine_cells += 1
-                    if self.revealed[y][x]:
-                        revealed_cells += 1
-        return non_mine_cells == revealed_cells
-
     def play(self):
         while True:
             self.print_board()
             try:
                 x = int(input("Enter x coordinate: "))
                 y = int(input("Enter y coordinate: "))
+                if x < 0 or x >= self.width or y < 0 or y >= self.height:
+                    print("Coordinates out of bounds. Try again.")
+                    continue
                 if not self.reveal(x, y):
                     self.print_board(reveal=True)
                     print("Game Over! You hit a mine.")
-                    break
-                if self.check_win():
-                    self.print_board(reveal=True)
-                    print("Congratulations! You've won!")
                     break
             except ValueError:
                 print("Invalid input. Please enter numbers only.")
