@@ -3,6 +3,7 @@ def print_board(board):
         print(" | ".join(row))
         print("-" * 5)
 
+
 def check_winner(board):
     # Check rows for a winner
     for row in board:
@@ -24,12 +25,14 @@ def check_winner(board):
 
     return False
 
+
 def check_draw(board):
     # If there are no empty spots left, it's a draw
     for row in board:
         if " " in row:
             return False
     return True
+
 
 def tic_tac_toe():
     board = [[" "]*3 for _ in range(3)]
@@ -41,11 +44,14 @@ def tic_tac_toe():
         # Input validation for row and column
         while True:
             try:
-                row = int(input(f"Enter row (0, 1, or 2) for player {player}: "))
-                col = int(input(f"Enter column (0, 1, or 2) for player {player}: "))
+                row = int(
+                    input(f"Enter row (0, 1, or 2) for player {player}: "))
+                col = int(
+                    input(f"Enter column (0, 1, or 2) for player {player}: "))
 
                 if row not in range(3) or col not in range(3):
-                    print("Invalid input. Row and column must be between 0 and 2. Try again.")
+                    print(
+                        "Invalid input. Row and column must be between 0 and 2. Try again.")
                     continue
 
                 if board[row][col] != " ":
@@ -68,5 +74,6 @@ def tic_tac_toe():
         print(f"Player {player} wins!")
     else:
         print("It's a draw!")
+
 
 tic_tac_toe()

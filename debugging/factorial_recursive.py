@@ -3,6 +3,8 @@ import sys
 
 # Function description:
 # This function calculates the factorial of a given non-negative integer `n` using recursion.
+
+
 def factorial(n):
     # Parameters:
     # n (int): A non-negative integer whose factorial is to be calculated.
@@ -13,6 +15,7 @@ def factorial(n):
         return 1
     else:
         return n * factorial(n-1)
+
 
 # Taking the input argument from the command line, converting it to an integer,
 # and calling the factorial function on it.
